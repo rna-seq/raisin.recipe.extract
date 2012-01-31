@@ -18,97 +18,43 @@ ACCESSION_ATTRIBUTES = set(['file_location',
                             'qualities',
                             'species'])
 
-def parse_profile_file(file):
-    parser = ConfigParser.RawConfigParser()
-    parser.optionxform = lambda s: s
-    parser.readfp(file)
-    profile = {}
-    if "pipeline" in parser.sections():
-        profile = dict(parser.items("pipeline"))
-    else:
-        raise AttributeError("The profile is missing a pipeline secion")
-    return profile
+def annotations(workspace):
+    headers = ("species", "version", "url", "file_location")
+    template = '\t'.join(['%s'] * len(headers)) + '\n'
+    output_file = open(os.path.join(workspace, "annotations.cfg"), "w")
+    output_file.write(template % headers)
 
-def parse_accession_file(file):
+    input_file = open('../../annotations/db.cfg', 'r')
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
-    parser.readfp(file)
-    accessions = {}
-    for section in parser.sections():
-        accessions[section] = dict(parser.items(section))
-    return accessions
+    parser.readfp(input_file)
 
-def parse_annotations_file(file):
-    parser = ConfigParser.RawConfigParser()
-    parser.optionxform = lambda s: s
-    parser.readfp(file)
-    annotations = {}
     for section in parser.sections():
         data = dict(parser.items(section))
-        key = data['file_location']
-        annotations[key] = data
-    return annotations
+        output_file.write(template % tuple([data[h] for h in headers]))
 
-def parse_genomes_file(file):
+    input_file.close()
+    output_file.close()
+
+
+def genomes(workspace):
+    headers = ("species", "version", "url", "file_location")
+    template = '\t'.join(['%s'] * len(headers)) + '\n'
+    output_file = open(os.path.join(workspace, "genomes.cfg"), "w")
+    output_file.write(template % headers)
+
+    input_file = open('../../genomes/db.cfg', 'r')
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
-    parser.readfp(file)
-    genomes = {}
+    parser.readfp(input_file)
+
     for section in parser.sections():
         data = dict(parser.items(section))
-        key = data['file_location']
-        genomes[key] = data
-    return genomes
+        output_file.write(template % tuple([data[h] for h in headers]))
 
-def check(project, read_length, accessions, profile, annotations, genomes):
-    """
-    Just some sanity checks to make sure that some basic assumptions are kept.
-    """
-    if not profile['MAPPER'] == 'GEM':
-        raise AttributeError
+    input_file.close()
+    output_file.close()
 
-    if not profile['MISMATCHES'] == '2':
-        raise AttributeError
-
-    if not profile['PROJECTID'] == project + read_length:
-        raise AttributeError
-
-    if not profile['DB'].startswith(project):
-        raise AttributeError
-
-    if not profile['COMMONDB'].startswith(project):
-        raise AttributeError
-
-    if not profile['DB'].endswith("_RNAseqPipeline"):
-        raise AttributeError
-
-    if not profile['COMMONDB'].endswith("_RNAseqPipelineCommon"):
-        raise AttributeError
-
-    #if not profile['ANNOTATION'].endswith(".gtf"):
-    #    raise AttributeError
-
-    if not profile['GENOMESEQ'].endswith(".fa"):
-        raise AttributeError
-
-    for accession_id, accession in accessions.items():
-
-        if not set(accession.keys()) == ACCESSION_ATTRIBUTES:
-            raise AttributeError
-
-        for file in accession['file_location'].split(';'):
-            if not accession['file_location'].endswith(".fastq.gz"):
-                raise AttributeError
-
-        if accession['readType'].split('x')[-1] != read_length:
-            raise AttributeError
-
-        #if not accession['mate_id'] == accession['pair_id']:
-        #    raise AttributeError
-        
-        #if not accession['mate_id'].startswith(accession['label']):
-        #    print accession
-        #    raise AttributeError
 
 def extract_files(accessions):
     for accession_id, accession in accessions.items():
@@ -142,19 +88,31 @@ def extract_files(accessions):
         else:
             yield accession_id, accession
 
-class Accession:
-    def __init__(self):
-        pass
 
-def main(options, buildout):
-    annotations_file = open('../annotations/db.cfg', 'r')
-    annotations = parse_annotations_file(annotations_file)
+def parse_profile_file(file):
+    parser = ConfigParser.RawConfigParser()
+    parser.optionxform = lambda s: s
+    parser.readfp(file)
+    profile = {}
+    if "pipeline" in parser.sections():
+        profile = dict(parser.items("pipeline"))
+    else:
+        print file
+        raise AttributeError("The profile is missing a pipeline secion")
+    return profile
 
-    genomes_file = open('../genomes/db.cfg', 'r')
-    genomes = parse_genomes_file(genomes_file)
+def parse_accession_file(file):
+    parser = ConfigParser.RawConfigParser()
+    parser.optionxform = lambda s: s
+    parser.readfp(file)
+    accessions = {}
+    for section in parser.sections():
+        accessions[section] = dict(parser.items(section))
+    return accessions
 
-    accession_files = [f for f in glob.glob('../accessions/*/*.cfg')]
-    profile_files = [f for f in glob.glob('../profiles/*/*.cfg')]
+
+def accessions(workspace):
+    input_files = [f for f in glob.glob('../../accessions/*/*.cfg')]
 
     headers = ["project_id",
                "accession_id",
@@ -164,18 +122,9 @@ def main(options, buildout):
                "pair_id",
                "label",
                "readType",
-               "read_length",
-               "file_type",
+               "type",
                "qualities",
-               #"mapper",
-               #"mismatches",
                "file_location",
-               #"annotation",
-               #"annotation_version",
-               #"annotation_url",
-               #"genome",
-               #"",
-               #"genome_url",
                "dataType",
                "rnaExtract",
                "localization",
@@ -186,21 +135,14 @@ def main(options, buildout):
                ]
 
     template = '\t'.join(['%s'] * len(headers)) + '\n'
-    output_file = open("static/generic/dashboard.csv", "w")
+    output_file = open(os.path.join(workspace, "accessions.cfg"), "w")
     output_file.write('\t'.join(headers) + '\n')
 
-    parsed_profiles = {}
-    for profile in profile_files:
-        profile_file = open(profile, 'r')
-        parsed_profiles[profile] = parse_profile_file(profile_file)
-
     parsed_accessions = {}
-    for accession in accession_files:
+    for accession in input_files:
         accession_file = open(accession, 'r')
         parsed_accessions[accession] = parse_accession_file(accession_file)
         
-    # check(project, read_length, accessions, profile, annotations, genomes)
-
     for key, value in parsed_accessions.items():
         project_id = os.path.split(os.path.split(key)[0])[-1]
         
@@ -299,26 +241,65 @@ def main(options, buildout):
                                           file['pair_id'], 
                                           file['label'], 
                                           file['readType'],
-                                          read_length,
                                           file['type'],
                                           file['qualities'],
-                                          #profile['MAPPER'],
-                                          #profile['MISMATCHES'],
                                           file['file_location'],
-                                          #profile['ANNOTATION'],
-                                          #annotations[profile['ANNOTATION']]['version'],
-                                          #annotations[profile['ANNOTATION']]['url'],
-                                          #profile['GENOMESEQ'],
-                                          #genomes[profile['GENOMESEQ']]['version'],
-                                          #genomes[profile['GENOMESEQ']]['url'],
                                           file['dataType'],
                                           file['rnaExtract'],
                                           file['localization'],
-                                          "1", #file['replicate'],
+                                          file['replicate'],
                                           file['lab'],
                                           file['view'],
                                           file['type']
                                           ))
+
+
+def profiles(workspace):
+    profile_files = [f for f in glob.glob('../../profiles/*/*.cfg')]
+
+    headers = ["project_id",
+               "mapper",
+               "mismatches",
+               "projectid",
+               "db",
+               "cluster",
+               "host",
+               "threads",
+               "template",
+               "commondb",
+               ]
+
+    template = '\t'.join(['%s'] * len(headers)) + '\n'
+    output_file = open(os.path.join(workspace, "profiles.cfg"), "w")
+    output_file.write('\t'.join(headers) + '\n')
+
+    parsed_profiles = {}
+    for profile in profile_files:
+        profile_file = open(profile, 'r')
+        parsed_profiles[profile] = parse_profile_file(profile_file)
+
+    for key, profile in parsed_profiles.items():
+        project_id = os.path.split(os.path.split(key)[0])[-1]
+        output_file.write(template % (project_id,
+                                      profile['MAPPER'],
+                                      profile.get('MISMATCHES', ''),
+                                      profile['PROJECTID'],
+                                      profile['DB'],
+                                      profile.get('CLUSTER', ''),
+                                      profile['HOST'],
+                                      profile['THREADS'],
+                                      profile['TEMPLATE'],
+                                      profile['COMMONDB']
+                                      )
+                            )
+
+
+def main(options, buildout):
+    workspace = options['workspace']
+    annotations(workspace)
+    genomes(workspace)
+    accessions(workspace)
+    profiles(workspace)
 
 if __name__ == '__main__':
     main()
