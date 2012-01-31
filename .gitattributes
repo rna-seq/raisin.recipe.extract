@@ -1,0 +1,7 @@
+* text=auto !eol
+raisin/__init__.py -text
+raisin/recipe/__init__.py -text
+raisin/recipe/extract/__init__.py -text
+raisin/recipe/extract/extract.py -text
+raisin/recipe/extract/recipe.py -text
+/setup.py -text
