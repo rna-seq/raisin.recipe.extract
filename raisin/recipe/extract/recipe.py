@@ -1,6 +1,7 @@
-import annotations
-import genomes
 import accessions
+import annotations
+import files
+import genomes
 import profiles
 
 class Recipe(object):
@@ -12,9 +13,10 @@ class Recipe(object):
 
     def install(self):
         workspace = self.options['workspace']
-        annotations.main(workspace)
-        genomes.main(workspace)
         accessions.main(workspace)
+        annotations.main(workspace)
+        files.main(workspace)
+        genomes.main(workspace)
         profiles.main(workspace)
         
     def update(self):
