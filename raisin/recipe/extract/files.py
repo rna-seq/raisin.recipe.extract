@@ -1,0 +1,77 @@
+import os
+import glob
+import ConfigParser
+import RestrictedPython
+import utils
+
+def extract_files(accessions):
+    for accession_id, accession in accessions.items():
+        if accession_id == "labeling":
+            continue
+        file_locations = accession['file_location'].split('\n')
+        if len(file_locations) > 1:
+            for key, value in accession.items():
+                accession[key] = [i.strip() for i in value.split('\n')]
+            for i in range(0, len(file_locations)):
+                file = {}
+                for key, value in accession.items():
+                    if len(value) == 1:
+                        file[key] = value[0]
+                    else:
+                        file[key] = value[i]
+                yield accession_id, file
+        else:
+            yield accession_id, accession
+
+def parse_accession_file(file):
+    parser = ConfigParser.RawConfigParser()
+    parser.optionxform = lambda s: s
+    parser.readfp(file)
+    accessions = {}
+    for section in parser.sections():
+        accessions[section] = dict(parser.items(section))
+    return accessions
+
+def main(workspace):
+    input_files = [f for f in glob.glob('../../accessions/*/*.cfg')]
+
+    headers = ["project_id",
+               "accession_id",
+               "mate_id",
+               "pair_id",
+               "label",
+               "type",
+               "file_location",
+               "configuration_file"
+               ]
+
+    template = '\t'.join(['%s'] * len(headers)) + '\n'
+    output_file = open(os.path.join(workspace, "files.csv"), "w")
+    output_file.write('\t'.join(headers) + '\n')
+
+    parsed_accessions = {}
+    for input_file in input_files:
+        print input_file
+        accession_file = open(input_file, 'r')
+        accessions = parse_accession_file(accession_file)
+        if accessions.has_key("labeling"):
+            labeling = accessions['labeling']
+            for accession_id, accession in accessions.items():
+                if not accession_id == 'labeling':
+                    accession.update(utils.get_labeling(accession, labeling))
+                    
+        project_id = os.path.split(os.path.split(input_file)[0])[-1]
+        files = extract_files(accessions)
+        for accession_id, file in files:
+            output_file.write(template % (project_id,
+                                          accession_id, 
+                                          file.get('mate_id', ''), 
+                                          file.get('pair_id', ''), 
+                                          file.get('label', ''), 
+                                          file['type'],
+                                          file['file_location'],
+                                          input_file
+                                          ))
+        accession_file.close()
+
+    output_file.close()
