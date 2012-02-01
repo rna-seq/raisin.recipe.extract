@@ -1,4 +1,7 @@
-import extract
+import annotations
+import genomes
+import accessions
+import profiles
 
 class Recipe(object):
 
@@ -8,7 +11,11 @@ class Recipe(object):
         self.options = options
 
     def install(self):
-        return extract.main(self.options, self.buildout)
+        workspace = self.options['workspace']
+        annotations.main(workspace)
+        genomes.main(workspace)
+        accessions.main(workspace)
+        profiles.main(workspace)
         
     def update(self):
         return self.install()
