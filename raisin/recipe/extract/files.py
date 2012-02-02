@@ -43,6 +43,7 @@ def main(workspace):
                "type",
                "file_location",
                "file_not_found",
+               "file_size",
                "configuration_file"
                ]
 
@@ -64,6 +65,7 @@ def main(workspace):
         project_id = os.path.split(os.path.split(input_file)[0])[-1]
         files = extract_files(accessions)
         for accession_id, file in files:
+            file_info = utils.file_info(file['file_location'])
             output_file.write(template % (project_id,
                                           accession_id, 
                                           file.get('mate_id', ''), 
@@ -71,7 +73,8 @@ def main(workspace):
                                           file.get('label', ''), 
                                           file['type'],
                                           file['file_location'],
-                                          utils.file_not_found(file['file_location']),
+                                          file_info['file_not_found'],
+                                          file_info['file_size'],
                                           input_file
                                           ))
         accession_file.close()
