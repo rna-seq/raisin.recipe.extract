@@ -1,8 +1,9 @@
 import os
 import ConfigParser
+import utils
 
 def main(workspace):
-    headers = ("species", "version", "url", "file_location")
+    headers = ("species", "version", "url", "file_location", "file_not_found")
     template = '\t'.join(['%s'] * len(headers)) + '\n'
     output_file = open(os.path.join(workspace, "genomes.csv"), "w")
     output_file.write(template % headers)
@@ -14,6 +15,7 @@ def main(workspace):
 
     for section in parser.sections():
         data = dict(parser.items(section))
+        data['file_not_found'] = utils.file_not_found(file['file_location'])
         output_file.write(template % tuple([data[h] for h in headers]))
 
     input_file.close()
