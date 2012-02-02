@@ -4,6 +4,12 @@ from RestrictedPython.Guards import safe_builtins
 from RestrictedPython.Guards import full_write_guard
 from RestrictedPython.PrintCollector import PrintCollector
 
+def file_not_found(file_location):
+    if os.path.exists(file_location):
+        return 0
+    else:
+        return 1
+
 def run_python(code, accession):
     """
     Run some restricted Python code for constructing the labels of accessions
