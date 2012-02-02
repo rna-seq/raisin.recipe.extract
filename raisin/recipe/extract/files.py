@@ -42,6 +42,7 @@ def main(workspace):
                "label",
                "type",
                "file_location",
+               "file_not_found",
                "configuration_file"
                ]
 
@@ -70,6 +71,7 @@ def main(workspace):
                                           file.get('label', ''), 
                                           file['type'],
                                           file['file_location'],
+                                          utils.file_not_found(file['file_location']),
                                           input_file
                                           ))
         accession_file.close()
