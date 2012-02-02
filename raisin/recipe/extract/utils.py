@@ -4,11 +4,15 @@ from RestrictedPython.Guards import safe_builtins
 from RestrictedPython.Guards import full_write_guard
 from RestrictedPython.PrintCollector import PrintCollector
 
-def file_not_found(file_location):
+
+def file_info(file_location):
+    info = {'file_not_found':1,
+            'file_size':0}
     if os.path.exists(file_location):
-        return 0
-    else:
-        return 1
+        info['file_not_found'] = 0
+        info['file_size'] = os.path.getsize(file_location)
+    return info
+
 
 def run_python(code, accession):
     """
