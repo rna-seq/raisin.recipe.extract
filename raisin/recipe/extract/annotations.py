@@ -3,7 +3,12 @@ import ConfigParser
 import utils
 
 def main(workspace):
-    headers = ("species", "version", "url", "file_location", "file_not_found")
+    headers = ("species", 
+               "version", 
+               "url", 
+               "file_location", 
+               "file_not_found",
+               "file_size")
     template = '\t'.join(['%s'] * len(headers)) + '\n'
     output_file = open(os.path.join(workspace, "annotations.csv"), "w")
     output_file.write(template % headers)
@@ -15,7 +20,7 @@ def main(workspace):
 
     for section in parser.sections():
         data = dict(parser.items(section))
-        data['file_not_found'] = utils.file_not_found(data['file_location'])
+        data.update(utils.file_info(data['file_location']))
         output_file.write(template % tuple([data[h] for h in headers]))
 
     input_file.close()
