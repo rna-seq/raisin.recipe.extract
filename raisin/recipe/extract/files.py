@@ -36,8 +36,17 @@ def main(workspace):
     input_files = [f for f in glob.glob('../../accessions/*/*.cfg')]
 
     headers = ["project_id",
-               "type",
+               "species",
+               "cell",
+               "readType",
+               "qualities",
                "file_location",
+               "dataType",
+               "rnaExtract",
+               "localization",
+               "lab",
+               "view",
+               "type",
                "file_not_found",
                "file_size",
                "configuration_file"
@@ -62,8 +71,17 @@ def main(workspace):
         for accession_id, file in files:
             file_info = utils.file_info(file['file_location'])
             output_file.write(template % (project_id,
-                                          file['type'],
-                                          file['file_location'],
+                                          file.get('species', ''),
+                                          file.get('cell', ''),
+                                          file.get('readType', ''),
+                                          file.get('qualities', ''),
+                                          file.get('file_location', ''),
+                                          file.get('dataType', ''),
+                                          file.get('rnaExtract', ''),
+                                          file.get('localization', ''),
+                                          file.get('lab', ''),
+                                          file.get('view', ''),
+                                          file.get('type', ''),
                                           file_info['file_not_found'],
                                           file_info['file_size'],
                                           input_file
