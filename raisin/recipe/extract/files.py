@@ -36,10 +36,6 @@ def main(workspace):
     input_files = [f for f in glob.glob('../../accessions/*/*.cfg')]
 
     headers = ["project_id",
-               "accession_id",
-               "mate_id",
-               "pair_id",
-               "label",
                "type",
                "file_location",
                "file_not_found",
@@ -53,7 +49,6 @@ def main(workspace):
 
     parsed_accessions = {}
     for input_file in input_files:
-        print input_file
         accession_file = open(input_file, 'r')
         accessions = parse_accession_file(accession_file)
         if accessions.has_key("labeling"):
@@ -67,10 +62,6 @@ def main(workspace):
         for accession_id, file in files:
             file_info = utils.file_info(file['file_location'])
             output_file.write(template % (project_id,
-                                          accession_id, 
-                                          file.get('mate_id', ''), 
-                                          file.get('pair_id', ''), 
-                                          file.get('label', ''), 
                                           file['type'],
                                           file['file_location'],
                                           file_info['file_not_found'],
