@@ -108,7 +108,5 @@ def get_labeling(accession, labeling):
     update['mate_id'] = mate_id
     update['mate_id'] = update['mate_id'].strip()
 
-
-    print update
     return update
     

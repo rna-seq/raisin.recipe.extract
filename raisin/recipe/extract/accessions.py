@@ -7,7 +7,6 @@ def extract_files(accessions):
         if accession_id == "labeling":
             continue
         file_locations = accession['file_location'].split('\n')
-        print accession
         if len(file_locations) == 1:
             if accession['type'] in ['fasta', 'fastq']:
                 accession['view'] = "RawData"
@@ -99,7 +98,6 @@ def main(workspace):
             if not 'cell' in file:
                 file['cell'] = 'cell'
             if not 'readType' in file:
-                print "No read type given"
                 file['readType'] = 'NA'
                 read_length = 'NA'
             elif file['readType'] == '2x76D':
@@ -149,22 +147,13 @@ def main(workspace):
             elif file['readType'] == '75':
                 read_length = 75
             else:
-                print file['readType']
                 raise AttributeError
             if not 'type' in file:
                 file['type'] = 'type'
-            else:
-                print file['type']
             if not 'dataType' in file:
                 file['dataType'] = 'dataType'
-            else:
-                print file['dataType']
             if not 'lab' in file:
                 file['lab'] = 'lab'
-            else:
-                print file['lab']
-            print file
-            print project_id
             output_file.write(template % (project_id,
                                           accession_id, 
                                           file['species'], 
