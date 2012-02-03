@@ -54,7 +54,6 @@ def main(workspace):
 
     parsed_profiles = {}
     for profile_file in profile_files:
-        print profile_file
         file = open(profile_file, 'r')
         parsed = parse_profile_file(file)
         project_id = os.path.split(os.path.split(profile_file)[0])[-1]
