@@ -47,6 +47,7 @@ def main(workspace):
                "lab",
                "view",
                "type",
+               "replicate",
                "file_not_found",
                "file_size",
                "configuration_file"
@@ -82,6 +83,7 @@ def main(workspace):
                                           file.get('lab', ''),
                                           file.get('view', ''),
                                           file.get('type', ''),
+                                          file.get('replicate', ''),
                                           file_info['file_not_found'],
                                           file_info['file_size'],
                                           input_file
