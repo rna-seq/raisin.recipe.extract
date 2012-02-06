@@ -36,6 +36,7 @@ def main(workspace):
     input_files = [f for f in glob.glob('../../accessions/*/*.cfg')]
 
     headers = ["project_id",
+               "accession_id",
                "species",
                "cell",
                "readType",
@@ -72,6 +73,7 @@ def main(workspace):
         for accession_id, file in files:
             file_info = utils.file_info(file['file_location'])
             output_file.write(template % (project_id,
+                                          accession_id,
                                           file.get('species', ''),
                                           file.get('cell', ''),
                                           file.get('readType', ''),
