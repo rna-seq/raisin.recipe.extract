@@ -2,11 +2,12 @@ import os
 import ConfigParser
 import utils
 
+
 def main(buildout_directory, workspace):
-    headers = ("species", 
-               "version", 
-               "url", 
-               "file_location", 
+    headers = ("species",
+               "version",
+               "url",
+               "file_location",
                "file_not_found",
                "file_size")
     template = '\t'.join(['%s'] * len(headers)) + '\n'
