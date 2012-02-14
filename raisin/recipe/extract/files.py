@@ -1,7 +1,6 @@
 import os
 import glob
 import ConfigParser
-import RestrictedPython
 import utils
 
 def extract_files(accessions):
@@ -59,7 +58,6 @@ def main(buildout_directory, workspace):
     output_file = open(os.path.join(workspace, "files.csv"), "w")
     output_file.write('\t'.join(headers) + '\n')
 
-    parsed_accessions = {}
     for input_file in input_files:
         accession_file = open(input_file, 'r')
         accessions = parse_accession_file(accession_file)
