@@ -40,7 +40,7 @@ setup(name='raisin.recipe.extract',
       install_requires=['setuptools',
                         'zc.buildout',
                         # -*- Extra requirements: -*-
-                        RestrictedPython,
+                        'RestrictedPython',
                         ],
       entry_points=entry_points,
       )
