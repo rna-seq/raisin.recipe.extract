@@ -17,8 +17,9 @@ def parse_accession_file(file):
         accessions[section] = dict(parser.items(section))
     return accessions
 
-def main(workspace):
-    input_files = [f for f in glob.glob('../../accessions/*/*.cfg')]
+def main(buildout_directory, workspace):
+    path = os.path.join(buildout_directory, 'accessions/*/*.cfg')
+    input_files = [f for f in glob.glob(path)]
 
     headers = ["project_id",
                "accession_id",
