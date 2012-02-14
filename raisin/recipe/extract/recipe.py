@@ -4,6 +4,7 @@ import files
 import genomes
 import profiles
 
+
 class Recipe(object):
 
     def __init__(self, buildout, name, options):
@@ -19,6 +20,6 @@ class Recipe(object):
         files.main(buildout_directory, workspace)
         genomes.main(buildout_directory, workspace)
         profiles.main(buildout_directory, workspace)
-        
+
     def update(self):
         return self.install()
