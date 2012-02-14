@@ -1,7 +1,7 @@
 import os
 import glob
 import ConfigParser
-import utils
+from raisin.recipe.extract import utils
 
 
 def extract_files(accessions):
@@ -13,21 +13,21 @@ def extract_files(accessions):
             for key, value in accession.items():
                 accession[key] = [i.strip() for i in value.split('\n')]
             for i in range(0, len(file_locations)):
-                file = {}
+                item = {}
                 for key, value in accession.items():
                     if len(value) == 1:
-                        file[key] = value[0]
+                        item[key] = value[0]
                     else:
-                        file[key] = value[i]
-                yield accession_id, file
+                        item[key] = value[i]
+                yield accession_id, item
         else:
             yield accession_id, accession
 
 
-def parse_accession_file(file):
+def parse_accession_file(accession_file):
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
-    parser.readfp(file)
+    parser.readfp(accession_file)
     accessions = {}
     for section in parser.sections():
         accessions[section] = dict(parser.items(section))
@@ -72,22 +72,22 @@ def main(buildout_directory, workspace):
 
         project_id = os.path.split(os.path.split(input_file)[0])[-1]
         files = extract_files(accessions)
-        for accession_id, file in files:
-            file_info = utils.file_info(file['file_location'])
+        for accession_id, item in files:
+            file_info = utils.file_info(item['file_location'])
             output_file.write(template % (project_id,
                                           accession_id,
-                                          file.get('species', ''),
-                                          file.get('cell', ''),
-                                          file.get('readType', ''),
-                                          file.get('qualities', ''),
-                                          file.get('file_location', ''),
-                                          file.get('dataType', ''),
-                                          file.get('rnaExtract', ''),
-                                          file.get('localization', ''),
-                                          file.get('lab', ''),
-                                          file.get('view', ''),
-                                          file.get('type', ''),
-                                          file.get('replicate', ''),
+                                          item.get('species', ''),
+                                          item.get('cell', ''),
+                                          item.get('readType', ''),
+                                          item.get('qualities', ''),
+                                          item.get('file_location', ''),
+                                          item.get('dataType', ''),
+                                          item.get('rnaExtract', ''),
+                                          item.get('localization', ''),
+                                          item.get('lab', ''),
+                                          item.get('view', ''),
+                                          item.get('type', ''),
+                                          item.get('replicate', ''),
                                           file_info['file_not_found'],
                                           file_info['file_size'],
                                           input_file
