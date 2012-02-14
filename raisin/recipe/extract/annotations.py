@@ -2,7 +2,7 @@ import os
 import ConfigParser
 import utils
 
-def main(workspace):
+def main(buildout_directory, workspace):
     headers = ("species", 
                "version", 
                "url", 
@@ -13,7 +13,12 @@ def main(workspace):
     output_file = open(os.path.join(workspace, "annotations.csv"), "w")
     output_file.write(template % headers)
 
-    input_file = open('../../annotations/db.cfg', 'r')
+    path = os.path.join(buildout_directory, 'annotations/db.cfg')
+    try:
+        input_file = open(path, 'r')
+    except IOError:
+        print "Missing file: %s" % path
+        return
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
     parser.readfp(input_file)
