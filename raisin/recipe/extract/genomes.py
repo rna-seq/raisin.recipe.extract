@@ -1,6 +1,6 @@
 import os
 import ConfigParser
-import utils
+from raisin.recipe.extract import utils
 
 
 def main(buildout_directory, workspace):
