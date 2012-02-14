@@ -28,8 +28,9 @@ def extract_profiles(parsed):
             profile['pipeline_id'] = pipeline
         yield profile
 
-def main(workspace):
-    profile_files = [f for f in glob.glob('../../profiles/*/*.cfg')]
+def main(buildout, workspace):
+    path = os.path.join(buildout, 'profiles/*/*.cfg')
+    profile_files = [f for f in glob.glob(path)]
 
     headers = ["project_id",
                "pipeline_id",
@@ -65,7 +66,7 @@ def main(workspace):
                                           profile['PROJECTID'],
                                           profile['DB'],
                                           profile.get('CLUSTER', ''),
-                                          profile['HOST'],
+                                          profile.get('HOST', ''),
                                           profile['THREADS'],
                                           profile['TEMPLATE'],
                                           profile['COMMONDB'],
