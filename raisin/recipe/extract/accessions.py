@@ -53,26 +53,18 @@ def main(buildout_directory, workspace):
         accessions = extract_accessions(value)
 
         for accession_id, accession in accessions:
-            if not 'species' in accession:
-                accession['species'] = ''
-            if not 'qualities' in accession:
-                accession['qualities'] = ''
-            if not 'replicate' in accession:
-                accession['replicate'] = ''
-            if not 'rnaExtract' in accession:
-                accession['rnaExtract'] = ''
-            if not 'localization' in accession:
-                accession['localization'] = ''
-            if not 'cell' in accession:
-                accession['cell'] = ''
-            if not 'type' in accession:
-                accession['type'] = ''
-            if not 'dataType' in accession:
-                accession['dataType'] = ''
-            if not 'lab' in accession:
-                accession['lab'] = ''
-            if not 'readType' in accession:
-                accession['readType'] = ''
+            for attribute in ['species',
+                              'qualities',
+                              'replicate',
+                              'rnaExtract',
+                              'localization',
+                              'cell',
+                              'type',
+                              'dataType',
+                              'lab',
+                              'readtype']:
+                if not attribute in accession:
+                    accession[attribute] = ''
             output_file.write(template % (project_id,
                                           accession_id,
                                           accession['species'],
