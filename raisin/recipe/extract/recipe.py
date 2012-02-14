@@ -12,13 +12,13 @@ class Recipe(object):
         self.options = options
 
     def install(self):
-        buildout = self.buildout['buildout']['directory']
+        buildout_directory = self.buildout['buildout']['directory']
         workspace = self.options['workspace']
-        accessions.main(buildout, workspace)
-        annotations.main(buildout, workspace)
-        files.main(buildout, workspace)
-        genomes.main(buildout, workspace)
-        profiles.main(buildout, workspace)
+        accessions.main(buildout_directory, workspace)
+        annotations.main(buildout_directory, workspace)
+        files.main(buildout_directory, workspace)
+        genomes.main(buildout_directory, workspace)
+        profiles.main(buildout_directory, workspace)
         
     def update(self):
         return self.install()
