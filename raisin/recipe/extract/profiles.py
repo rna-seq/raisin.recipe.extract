@@ -28,8 +28,8 @@ def extract_profiles(parsed):
             profile['pipeline_id'] = pipeline
         yield profile
 
-def main(buildout, workspace):
-    path = os.path.join(buildout, 'profiles/*/*.cfg')
+def main(buildout_directory, workspace):
+    path = os.path.join(buildout_directory, 'profiles/*/*.cfg')
     profile_files = [f for f in glob.glob(path)]
 
     headers = ["project_id",
