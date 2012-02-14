@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """Recipe raisin.recipe.extract"""
 
-import accessions
-import annotations
-import files
-import genomes
-import profiles
+from raisin.recipe.extract import accessions
+from raisin.recipe.extract import annotations
+from raisin.recipe.extract import files
+from raisin.recipe.extract import genomes
+from raisin.recipe.extract import profiles
 
 
 class Recipe(object):
