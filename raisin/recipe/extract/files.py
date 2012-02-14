@@ -3,6 +3,7 @@ import glob
 import ConfigParser
 import utils
 
+
 def extract_files(accessions):
     for accession_id, accession in accessions.items():
         if accession_id == "labeling":
@@ -22,6 +23,7 @@ def extract_files(accessions):
         else:
             yield accession_id, accession
 
+
 def parse_accession_file(file):
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
@@ -30,6 +32,7 @@ def parse_accession_file(file):
     for section in parser.sections():
         accessions[section] = dict(parser.items(section))
     return accessions
+
 
 def main(buildout_directory, workspace):
     path = os.path.join(buildout_directory, 'accessions/*/*.cfg')
@@ -61,12 +64,12 @@ def main(buildout_directory, workspace):
     for input_file in input_files:
         accession_file = open(input_file, 'r')
         accessions = parse_accession_file(accession_file)
-        if accessions.has_key("labeling"):
+        if "labeling" in accessions:
             labeling = accessions['labeling']
             for accession_id, accession in accessions.items():
                 if not accession_id == 'labeling':
                     accession.update(utils.get_labeling(accession, labeling))
-                    
+
         project_id = os.path.split(os.path.split(input_file)[0])[-1]
         files = extract_files(accessions)
         for accession_id, file in files:
