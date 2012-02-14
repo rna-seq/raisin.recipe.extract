@@ -10,10 +10,10 @@ def extract_accessions(accessions):
         yield accession_id, accession
 
 
-def parse_accession_file(file):
+def parse_accession_file(accession_file):
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
-    parser.readfp(file)
+    parser.readfp(accession_file)
     accessions = {}
     for section in parser.sections():
         accessions[section] = dict(parser.items(section))
