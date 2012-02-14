@@ -2,6 +2,7 @@ import os
 import glob
 import ConfigParser
 
+
 def parse_profile_file(file):
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
@@ -10,13 +11,14 @@ def parse_profile_file(file):
     for section in parser.sections():
         profiles[section] = dict(parser.items(section))
     return profiles
-    
+
+
 def extract_profiles(parsed):
     pipelines = set([])
     for key, value in parsed.items():
-        if value.has_key('pipeline'):
+        if 'pipeline' in value:
             pipelines.add(value['pipeline'])
-        elif value.has_key('accession'):
+        elif 'accession' in value:
             pipelines.add('pipeline')
     for pipeline in pipelines:
         if pipeline == 'pipeline':
@@ -27,6 +29,7 @@ def extract_profiles(parsed):
             profile.update(parsed[pipeline])
             profile['pipeline_id'] = pipeline
         yield profile
+
 
 def main(buildout_directory, workspace):
     path = os.path.join(buildout_directory, 'profiles/*/*.cfg')
@@ -53,27 +56,26 @@ def main(buildout_directory, workspace):
     output_file = open(os.path.join(workspace, "profiles.csv"), "w")
     output_file.write('\t'.join(headers) + '\n')
 
-    parsed_profiles = {}
     for profile_file in profile_files:
         file = open(profile_file, 'r')
         parsed = parse_profile_file(file)
         project_id = os.path.split(os.path.split(profile_file)[0])[-1]
         for profile in extract_profiles(parsed):
-            output_file.write(template % (project_id,
-                                          profile['pipeline_id'],
-                                          profile['MAPPER'],
-                                          profile['MISMATCHES'],
-                                          profile['PROJECTID'],
-                                          profile['DB'],
-                                          profile.get('CLUSTER', ''),
-                                          profile.get('HOST', ''),
-                                          profile['THREADS'],
-                                          profile['TEMPLATE'],
-                                          profile['COMMONDB'],
-                                          profile['ANNOTATION'],
-                                          profile['GENOMESEQ'],
-                                          profile.get('PREPROCESS', ''),
-                                          profile.get('PREPROCESS_TRIM_LENGTH', '')
-                                          )
-                                )
-
+            output_file.write(template % (
+                                  project_id,
+                                  profile['pipeline_id'],
+                                  profile['MAPPER'],
+                                  profile['MISMATCHES'],
+                                  profile['PROJECTID'],
+                                  profile['DB'],
+                                  profile.get('CLUSTER', ''),
+                                  profile.get('HOST', ''),
+                                  profile['THREADS'],
+                                  profile['TEMPLATE'],
+                                  profile['COMMONDB'],
+                                  profile['ANNOTATION'],
+                                  profile['GENOMESEQ'],
+                                  profile.get('PREPROCESS', ''),
+                                  profile.get('PREPROCESS_TRIM_LENGTH', '')
+                                  )
+                             )
