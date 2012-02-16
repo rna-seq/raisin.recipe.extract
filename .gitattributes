@@ -1,11 +1,1 @@
 * text=auto !eol
-raisin/__init__.py -text
-raisin/recipe/__init__.py -text
-raisin/recipe/extract/__init__.py -text
-raisin/recipe/extract/accessions.py -text
-raisin/recipe/extract/annotations.py -text
-raisin/recipe/extract/files.py -text
-raisin/recipe/extract/genomes.py -text
-raisin/recipe/extract/profiles.py -text
-raisin/recipe/extract/utils.py -text
-/setup.py -text
