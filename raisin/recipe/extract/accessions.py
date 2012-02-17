@@ -27,6 +27,7 @@ def main(buildout_directory, workspace):
     headers = ["project_id",
                "accession_id",
                "species",
+               "gender",
                "cell",
                "readType",
                "type",
@@ -54,6 +55,7 @@ def main(buildout_directory, workspace):
 
         for accession_id, accession in accessions:
             for attribute in ['species',
+                              'gender',
                               'qualities',
                               'replicate',
                               'rnaExtract',
@@ -68,6 +70,7 @@ def main(buildout_directory, workspace):
             output_file.write(template % (project_id,
                                           accession_id,
                                           accession['species'],
+                                          accession['gender'],
                                           accession['cell'],
                                           accession['readType'],
                                           accession['type'],
