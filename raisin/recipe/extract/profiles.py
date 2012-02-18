@@ -59,10 +59,9 @@ def main(buildout_directory, workspace):
     for profile_file in profile_files:
         file = open(profile_file, 'r')
         parsed = parse_profile_file(file)
-        project_id = os.path.split(os.path.split(profile_file)[0])[-1]
         for profile in extract_profiles(parsed):
             output_file.write(template % (
-                                  project_id,
+                                  profile['PROJECTID'],
                                   profile['pipeline_id'],
                                   profile['MAPPER'],
                                   profile['MISMATCHES'],
