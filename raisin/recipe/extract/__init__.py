@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Recipe raisin.recipe.extract"""
 
+import os
+
 from raisin.recipe.extract import accessions
 from raisin.recipe.extract import annotations
 from raisin.recipe.extract import files
@@ -18,6 +20,8 @@ class Recipe(object):
     def install(self):
         buildout_directory = self.buildout['buildout']['directory']
         workspace = self.options['workspace']
+        if not os.path.exists(workspace):
+            os.makedirs(workspace)
         accessions.main(self.buildout, buildout_directory, workspace)
         annotations.main(buildout_directory, workspace)
         files.main(buildout_directory, workspace)
