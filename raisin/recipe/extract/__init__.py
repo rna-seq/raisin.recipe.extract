@@ -23,7 +23,8 @@ class Recipe(object):
         if not os.path.exists(workspace):
             os.makedirs(workspace)
         accessions.main(self.buildout, buildout_directory, workspace)
-        annotations.main(buildout_directory, workspace)
+        annotations_file = self.options['annotations_file']
+        annotations.main(buildout_directory, workspace, annotations_file)
         files.main(buildout_directory, workspace)
         genomes.main(buildout_directory, workspace)
         profiles.main(self.buildout, buildout_directory, workspace)
