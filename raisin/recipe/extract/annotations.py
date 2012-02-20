@@ -3,7 +3,7 @@ import ConfigParser
 from raisin.recipe.extract import utils
 
 
-def main(buildout_directory, workspace):
+def main(buildout_directory, workspace, annotations_file):
     headers = ("species",
                "version",
                "url",
@@ -13,13 +13,7 @@ def main(buildout_directory, workspace):
     template = '\t'.join(['%s'] * len(headers)) + '\n'
     output_file = open(os.path.join(workspace, "annotations.csv"), "w")
     output_file.write(template % headers)
-
-    path = os.path.join(buildout_directory, 'annotations/db.cfg')
-    try:
-        input_file = open(path, 'r')
-    except IOError:
-        print "Missing file: %s" % path
-        return
+    input_file = open(annotations_file, 'r')
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
     parser.readfp(input_file)
