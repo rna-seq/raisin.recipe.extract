@@ -28,7 +28,10 @@ class Recipe(object):
             raise AttributeError("annotations_file not found: %s" % annotations_file)
         annotations.main(buildout_directory, workspace, annotations_file)
         files.main(buildout_directory, workspace)
-        genomes.main(buildout_directory, workspace)
+        genomes_file = self.options['genomes_file']
+        if not os.path.exists(genomes_file):
+            raise AttributeError("genomes_file not found: %s" % genomes_file)
+        genomes.main(buildout_directory, workspace, genomes_file)
         profiles.main(self.buildout, buildout_directory, workspace)
 
     def update(self):
