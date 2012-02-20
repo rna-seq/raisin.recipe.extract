@@ -24,6 +24,8 @@ class Recipe(object):
             os.makedirs(workspace)
         accessions.main(self.buildout, buildout_directory, workspace)
         annotations_file = self.options['annotations_file']
+        if not os.path.exists(annotations_file):
+            raise AttributeError("annotations_file not found: %s" % annotations_file)
         annotations.main(buildout_directory, workspace, annotations_file)
         files.main(buildout_directory, workspace)
         genomes.main(buildout_directory, workspace)
