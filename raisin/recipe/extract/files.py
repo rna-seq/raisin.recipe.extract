@@ -34,9 +34,10 @@ def parse_accession_file(accession_file):
     return accessions
 
 
-def main(buildout_directory, workspace):
-    path = os.path.join(buildout_directory, 'accessions/*/*.cfg')
-    input_files = [f for f in glob.glob(path)]
+def main(buildout, buildout_directory, workspace):
+    input_files = []
+    for path in buildout['pipelines_configurations']['accessions'].split('\n'):
+        input_files.append(os.path.join(buildout_directory, path))
 
     headers = ["project_id",
                "accession_id",
