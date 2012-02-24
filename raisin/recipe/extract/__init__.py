@@ -9,6 +9,7 @@ from raisin.recipe.extract import files
 from raisin.recipe.extract import genomes
 from raisin.recipe.extract import profiles
 from raisin.recipe.extract import replicates
+from raisin.recipe.extract import runs
 
 
 class Recipe(object):
@@ -35,6 +36,8 @@ class Recipe(object):
         genomes.main(buildout_directory, workspace, genomes_file)
         profiles.main(self.buildout, buildout_directory, workspace)
         replicates.main(self.buildout, buildout_directory, workspace)
-
+        dumps_folder = self.options['pipeline_dumps']
+        runs.main(self.buildout, buildout_directory, workspace, dumps_folder)
+        
     def update(self):
         return self.install()
