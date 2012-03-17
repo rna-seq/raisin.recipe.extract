@@ -12,6 +12,7 @@ def add_runs(runs_file, profile, dumps_folder):
     file_name = "%s_experiments.csv" % profile['COMMONDB']
     path = os.path.join(dumps_folder, file_name)
     if not os.path.exists(path):
+        print "Warning: Path to dumped file does not exist: %s" % path
         return
     experiments = read_csv(path)
     project_id = profile['PROJECTID']
