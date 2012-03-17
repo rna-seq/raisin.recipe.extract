@@ -13,17 +13,20 @@ def parse_profile_file(file):
     return profiles
 
 def extract_replicates(parsed):
+    """
+    Extract the replicates from the runs
+    """
     replicates = []
     for key, value in parsed.items():
         if 'pipeline' in value:
+            # Specific pipelines can be defined for each run
             value['profile'] = parsed['pipeline'].copy()
             value['profile'].update(parsed[value['pipeline']])
             value['pipeline_id'] = value['pipeline']
         elif 'accession' in value:
             value['profile'] = parsed['pipeline'].copy()
             value['pipeline_id'] = 'pipeline'
-        if 'pipeline' in value:
-            yield (key, value)
+        yield (key, value)
 
 def main(buildout, buildout_directory, workspace):
     profile_files = []
@@ -57,6 +60,8 @@ def main(buildout, buildout_directory, workspace):
         file = open(profile_file, 'r')
         parsed = parse_profile_file(file)
         for replicate_id, replicate in extract_replicates(parsed):
+            if not replicate.has_key('profile'):
+                continue
             profile = replicate['profile']
             output_file.write(template % (
                                   profile['PROJECTID'],
