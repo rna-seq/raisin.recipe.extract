@@ -28,6 +28,7 @@ def main(buildout, buildout_directory, workspace):
     headers = ["project_id",
                "accession_id",
                "species",
+               "partition",
                "gender",
                "cell",
                "readType",
@@ -54,8 +55,10 @@ def main(buildout, buildout_directory, workspace):
 
         accessions = extract_accessions(value)
 
+
         for accession_id, accession in accessions:
             for attribute in ['species',
+                              'label',
                               'gender',
                               'qualities',
                               'replicate',
@@ -68,9 +71,15 @@ def main(buildout, buildout_directory, workspace):
                               'readtype']:
                 if not attribute in accession:
                     accession[attribute] = ''
+                else:
+                    if '\n' in accession[attribute]:
+                        accession[attribute] = accession[attribute].split('\n')[0]
+
+
             output_file.write(template % (project_id,
                                           accession_id,
                                           accession['species'],
+                                          accession['label'],
                                           accession['gender'],
                                           accession['cell'],
                                           accession['readType'],
