@@ -60,7 +60,7 @@ def main(buildout, buildout_directory, workspace):
         file = open(profile_file, 'r')
         parsed = parse_profile_file(file)
         for replicate_id, replicate in extract_replicates(parsed):
-            if not replicate.has_key('profile'):
+            if not 'profile' in replicate:
                 continue
             profile = replicate['profile']
             output_file.write(template % (
