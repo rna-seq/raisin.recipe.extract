@@ -15,7 +15,6 @@ def extract_replicates(parsed):
     """
     Extract the replicates from the runs
     """
-    replicates = []
     for key, value in parsed.items():
         if 'pipeline' in value:
             # Specific pipelines can be defined for each run
