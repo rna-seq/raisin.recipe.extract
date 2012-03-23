@@ -38,7 +38,7 @@ def add_runs(runs_file, profile, dumps_folder):
         runs_file.write('\n')
 
 
-def main(buildout, buildout_directory, workspace, dumps_folder):
+def main(workspace, dumps_folder):
     runs_file_name = os.path.join(workspace, 'runs.csv')
     runs_file = open(runs_file_name, 'w')
     headers = ['project_id',

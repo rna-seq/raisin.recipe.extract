@@ -19,11 +19,7 @@ def parse_accession_file(accession_file):
     return accessions
 
 
-def main(buildout, buildout_directory, workspace):
-    input_files = []
-    for path in buildout['pipelines_configurations']['accessions'].split('\n'):
-        input_files.append(os.path.join(buildout_directory, path))
-
+def main(workspace, accession_files):
     headers = ["project_id",
                "accession_id",
                "species",
@@ -45,7 +41,7 @@ def main(buildout, buildout_directory, workspace):
     output_file.write('\t'.join(headers) + '\n')
 
     parsed_accessions = {}
-    for accession in input_files:
+    for accession in accession_files:
         accession_file = open(accession, 'r')
         parsed_accessions[accession] = parse_accession_file(accession_file)
 

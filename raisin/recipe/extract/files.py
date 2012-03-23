@@ -33,11 +33,7 @@ def parse_accession_file(accession_file):
     return accessions
 
 
-def main(buildout, buildout_directory, workspace):
-    input_files = []
-    for path in buildout['pipelines_configurations']['accessions'].split('\n'):
-        input_files.append(os.path.join(buildout_directory, path))
-
+def main(workspace, accessions_files):
     headers = ["project_id",
                "accession_id",
                "species",
@@ -62,7 +58,7 @@ def main(buildout, buildout_directory, workspace):
     output_file = open(os.path.join(workspace, "files.csv"), "w")
     output_file.write('\t'.join(headers) + '\n')
 
-    for input_file in input_files:
+    for input_file in accessions_files:
         accession_file = open(input_file, 'r')
         accessions = parse_accession_file(accession_file)
         if "labeling" in accessions:

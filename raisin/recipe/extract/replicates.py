@@ -2,10 +2,10 @@ import os
 import ConfigParser
 
 
-def parse_profile_file(file):
+def parse_profile_file(profile_file):
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
-    parser.readfp(file)
+    parser.readfp(profile_file)
     profiles = {}
     for section in parser.sections():
         profiles[section] = dict(parser.items(section))
@@ -28,11 +28,7 @@ def extract_replicates(parsed):
         yield (key, value)
 
 
-def main(buildout, buildout_directory, workspace):
-    profile_files = []
-    for path in buildout['pipelines_configurations']['profiles'].split('\n'):
-        profile_files.append(os.path.join(buildout_directory, path))
-
+def main(workspace, profile_files):
     headers = ["project_id",
                "replicate_id",
                "accession_id",
@@ -56,9 +52,9 @@ def main(buildout, buildout_directory, workspace):
     output_file = open(os.path.join(workspace, "replicates.csv"), "w")
     output_file.write('\t'.join(headers) + '\n')
 
-    for profile_file in profile_files:
-        file = open(profile_file, 'r')
-        parsed = parse_profile_file(file)
+    for profile_file_name in profile_files:
+        profile_file = open(profile_file_name, 'r')
+        parsed = parse_profile_file(profile_file)
         for replicate_id, replicate in extract_replicates(parsed):
             if not 'profile' in replicate:
                 continue

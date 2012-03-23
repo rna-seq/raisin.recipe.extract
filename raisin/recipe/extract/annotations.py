@@ -3,7 +3,7 @@ import ConfigParser
 from raisin.recipe.extract import utils
 
 
-def main(buildout_directory, workspace, annotations_file):
+def main(workspace, annotations_file):
     headers = ("species",
                "version",
                "url",

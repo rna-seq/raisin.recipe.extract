@@ -3,7 +3,7 @@ import ConfigParser
 from raisin.recipe.extract import utils
 
 
-def main(buildout_directory, workspace, genomes_file):
+def main(workspace, genomes_file):
     headers = ("species",
                "version",
                "url",

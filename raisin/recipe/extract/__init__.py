@@ -13,52 +13,104 @@ from raisin.recipe.extract import runs
 
 
 class Recipe(object):
+    """
+    Recipe to extract diverse configurations from the buildout configuration.
+    """
 
     def __init__(self, buildout, name, options):
         self.buildout = buildout
+        self.buildout_directory = self.buildout['buildout']['directory']
         self.name = name
         self.options = options
 
+    def get_workspace(self):
+        """
+        Get the workspace where the extracted files will be stored.
+        If it doesn't exist, it is created.
+        """
+        if not os.path.exists(self.options['workspace']):
+            os.makedirs(self.options['workspace'])
+        return self.options['workspace']
+
+    def get_profile_files(self):
+        """
+        Get the profiles configured in the
+
+            pipelines_configurations
+
+        section of the buildout
+        """
+        result = []
+        configuration = self.buildout['pipelines_configurations']['profiles']
+        for path in configuration.split('\n'):
+            result.append(os.path.join(self.buildout_directory, path))
+        return result
+
+    def get_accession_files(self):
+        """
+        Get the accessions configured in the
+
+            pipelines_configurations
+
+        section of the buildout
+        """
+        result = []
+        configuration = self.buildout['pipelines_configurations']['accessions']
+        for path in configuration.split('\n'):
+            result.append(os.path.join(self.buildout_directory, path))
+        return result
+
+    def get_dumps_folder(self):
+        """
+        Get the location of the dumps folder.
+        If it doesn't exist, raise an error.
+        """
+        if not os.path.exists(self.options['pipeline_dumps']):
+            message = "dumps_folder not found: %s"
+            raise AttributeError(message % self.options['pipeline_dumps'])
+        return self.options['pipeline_dumps']
+
+    def get_annotations_file(self):
+        """
+        Get the location of the annotations file.
+        If it doesn't exist, raise an error.
+        """
+        if not os.path.exists(self.options['annotations_file']):
+            message = "annotations_file not found: %s"
+            raise AttributeError(message % self.options['annotations_file'])
+        return self.options['annotations_file']
+
+    def get_genomes_file(self):
+        """
+        Get the location of the genomes file.
+        If it doesn't exist, raise an error.
+        """
+        if not os.path.exists(self.options['genomes_file']):
+            message = "genomes_file not found: %s"
+            raise AttributeError(message % self.options['genomes_file'])
+        return self.options['genomes_file']
+
     def install(self):
-        buildout_directory = self.buildout['buildout']['directory']
-        workspace = self.options['workspace']
-        if not os.path.exists(workspace):
-            os.makedirs(workspace)
+        """
+        Run the recipe.
+        """
+        workspace = self.get_workspace()
+        profile_files = self.get_profile_files()
+        accession_files = self.get_accession_files()
+        dumps_folder = self.get_dumps_folder()
+        annotations_file = self.get_annotations_file()
+        genomes_file = self.get_genomes_file()
 
-        # Accessions
-        accessions.main(self.buildout, buildout_directory, workspace)
-
-        # Annotations
-        annotations_file = self.options['annotations_file']
-        if not os.path.exists(annotations_file):
-            message = "annotations_file not found: %s" % annotations_file
-            raise AttributeError(message)
-        annotations.main(buildout_directory, workspace, annotations_file)
-
-        # Files
-        files.main(self.buildout, buildout_directory, workspace)
-
-        # Genomes
-        genomes_file = self.options['genomes_file']
-        if not os.path.exists(genomes_file):
-            raise AttributeError("genomes_file not found: %s" % genomes_file)
-        genomes.main(buildout_directory, workspace, genomes_file)
-
-        # Profiles
-        profile_files = []
-        profiles_text = self.buildout['pipelines_configurations']['profiles']
-        for path in profiles_text.split('\n'):
-            profile_files.append(os.path.join(buildout_directory, path))
-        profiles.main(profile_files, workspace)
-
-        # Replicates
-        replicates.main(self.buildout, buildout_directory, workspace)
-
-        # Runs
-        dumps_folder = self.options['pipeline_dumps']
-        if not os.path.exists(dumps_folder):
-            raise AttributeError("dumps_folder not found: %s" % dumps_folder)
-        runs.main(self.buildout, buildout_directory, workspace, dumps_folder)
+        accessions.main(workspace, accession_files)
+        annotations.main(workspace, annotations_file)
+        files.main(workspace, accession_files)
+        genomes.main(workspace, genomes_file)
+        profiles.main(workspace, profile_files)
+        replicates.main(workspace, profile_files)
+        runs.main(workspace, dumps_folder)
 
     def update(self):
+        """
+        Update the recipe.
+        """
         return self.install()

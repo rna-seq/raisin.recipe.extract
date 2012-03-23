@@ -52,7 +52,8 @@ def run_python(code, accession):
 def check_labeling(labeling):
     for key in ['pair_id', 'mate_id', 'label']:
         # No buildout variable substitution allowed to keep it simple
-        if '${' in  labeling.get('key', ''):
+        if '${' in labeling.get(key, ''):
+            print labeling
             raise AttributeError
 
 
