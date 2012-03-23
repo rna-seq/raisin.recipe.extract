@@ -45,7 +45,7 @@ class Recipe(object):
 
         # Profiles
         profile_files = []
-        for path in buildout['pipelines_configurations']['profiles'].split('\n'):
+        for path in self.buildout['pipelines_configurations']['profiles'].split('\n'):
             profile_files.append(os.path.join(buildout_directory, path))        
         profiles.main(profile_files, workspace)
 
