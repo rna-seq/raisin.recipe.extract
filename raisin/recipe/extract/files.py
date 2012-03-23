@@ -1,5 +1,4 @@
 import os
-import glob
 import ConfigParser
 from raisin.recipe.extract import utils
 
