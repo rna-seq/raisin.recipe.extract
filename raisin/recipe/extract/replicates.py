@@ -32,7 +32,7 @@ def main(buildout, buildout_directory, workspace):
     profile_files = []
     for path in buildout['pipelines_configurations']['profiles'].split('\n'):
         profile_files.append(os.path.join(buildout_directory, path))
-        
+
     headers = ["project_id",
                "replicate_id",
                "accession_id",
@@ -55,7 +55,7 @@ def main(buildout, buildout_directory, workspace):
     template = '\t'.join(['%s'] * len(headers)) + '\n'
     output_file = open(os.path.join(workspace, "replicates.csv"), "w")
     output_file.write('\t'.join(headers) + '\n')
-    
+
     for profile_file in profile_files:
         file = open(profile_file, 'r')
         parsed = parse_profile_file(file)
@@ -83,5 +83,3 @@ def main(buildout, buildout_directory, workspace):
                                   profile.get('PREPROCESS_TRIM_LENGTH', '')
                                   )
                              )
-            
-            
