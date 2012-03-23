@@ -31,7 +31,8 @@ class Recipe(object):
         # Annotations
         annotations_file = self.options['annotations_file']
         if not os.path.exists(annotations_file):
-            raise AttributeError("annotations_file not found: %s" % annotations_file)
+            message = "annotations_file not found: %s" % annotations_file
+            raise AttributeError(message)
         annotations.main(buildout_directory, workspace, annotations_file)
 
         # Files
@@ -45,7 +46,8 @@ class Recipe(object):
 
         # Profiles
         profile_files = []
-        for path in self.buildout['pipelines_configurations']['profiles'].split('\n'):
+        profiles_text = self.buildout['pipelines_configurations']['profiles']
+        for path in profile_text.split('\n'):
             profile_files.append(os.path.join(buildout_directory, path))        
         profiles.main(profile_files, workspace)
 
