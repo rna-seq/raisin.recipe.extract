@@ -2,6 +2,7 @@
 """Recipe raisin.recipe.extract"""
 
 import os
+import glob
 
 from raisin.recipe.extract import accessions
 from raisin.recipe.extract import annotations
@@ -38,12 +39,22 @@ class Recipe(object):
 
             pipelines_configurations
 
-        section of the buildout
+        section of the buildout.
+        
+        Alternatively looks in the configured
+        
+            profiles_folder
+    
+        And takes all profile configurations from there.
         """
         result = []
-        configuration = self.buildout['pipelines_configurations']['profiles']
-        for path in configuration.split('\n'):
-            result.append(os.path.join(self.buildout_directory, path))
+        if 'pipelines_configurations' in self.buildout:
+            configuration = self.buildout['pipelines_configurations']['profiles']
+            for path in configuration.split('\n'):
+                result.append(os.path.join(self.buildout_directory, path))
+        elif 'profiles_folder' in self.options:
+            path = os.path.join(self.options['profiles_folder'], '/*/db.cfg')
+            result = [f for f in glob.glob(path)]
         return result
 
     def get_accession_files(self):
@@ -55,9 +66,13 @@ class Recipe(object):
         section of the buildout
         """
         result = []
-        configuration = self.buildout['pipelines_configurations']['accessions']
-        for path in configuration.split('\n'):
-            result.append(os.path.join(self.buildout_directory, path))
+        if 'pipelines_configurations' in self.buildout:
+            configuration = self.buildout['pipelines_configurations']['accessions']
+            for path in configuration.split('\n'):
+                result.append(os.path.join(self.buildout_directory, path))
+        elif 'accessions_folder' in self.options:
+            path = os.path.join(self.options['accessions_folder'], '/*/db.cfg')
+            result = [f for f in glob.glob(path)]
         return result
 
     def get_dumps_folder(self):
