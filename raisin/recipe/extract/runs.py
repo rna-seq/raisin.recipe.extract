@@ -15,7 +15,6 @@ def add_runs(runs_file, profile, dumps_folder):
         print "Warning: Path to dumped file does not exist: %s" % path
         return
     experiments = read_csv(path)
-    project_id = profile['PROJECTID']
     for experiment in experiments:
         line = [experiment['project_id'],
                 experiment['experiment_id'],
