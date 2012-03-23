@@ -53,7 +53,7 @@ class Recipe(object):
             for path in configuration.split('\n'):
                 result.append(os.path.join(self.buildout_directory, path))
         elif 'profiles_folder' in self.options:
-            path = os.path.join(self.options['profiles_folder'], '/*/db.cfg')
+            path = os.path.join(self.options['profiles_folder'], '*/db.cfg')
             result = [f for f in glob.glob(path)]
         return result
 
@@ -71,7 +71,7 @@ class Recipe(object):
             for path in configuration.split('\n'):
                 result.append(os.path.join(self.buildout_directory, path))
         elif 'accessions_folder' in self.options:
-            path = os.path.join(self.options['accessions_folder'], '/*/db.cfg')
+            path = os.path.join(self.options['accessions_folder'], '*/db.cfg')
             result = [f for f in glob.glob(path)]
         return result
 
