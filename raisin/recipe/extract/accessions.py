@@ -71,7 +71,8 @@ def main(buildout, buildout_directory, workspace):
                     accession[attribute] = ''
                 else:
                     if '\n' in accession[attribute]:
-                        accession[attribute] = accession[attribute].split('\n')[0]
+                        first = accession[attribute].split('\n')[0]
+                        accession[attribute] = first
 
             output_file.write(template % (project_id,
                                           accession_id,
