@@ -73,7 +73,6 @@ def main(buildout, buildout_directory, workspace):
                     if '\n' in accession[attribute]:
                         accession[attribute] = accession[attribute].split('\n')[0]
 
-
             output_file.write(template % (project_id,
                                           accession_id,
                                           accession['species'],
