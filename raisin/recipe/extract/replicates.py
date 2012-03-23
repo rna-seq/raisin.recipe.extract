@@ -11,6 +11,7 @@ def parse_profile_file(file):
         profiles[section] = dict(parser.items(section))
     return profiles
 
+
 def extract_replicates(parsed):
     """
     Extract the replicates from the runs
@@ -25,6 +26,7 @@ def extract_replicates(parsed):
             value['profile'] = parsed['pipeline'].copy()
             value['pipeline_id'] = 'pipeline'
         yield (key, value)
+
 
 def main(buildout, buildout_directory, workspace):
     profile_files = []
