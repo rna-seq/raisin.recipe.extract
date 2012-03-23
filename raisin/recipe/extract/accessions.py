@@ -54,7 +54,6 @@ def main(buildout, buildout_directory, workspace):
 
         accessions = extract_accessions(value)
 
-
         for accession_id, accession in accessions:
             for attribute in ['species',
                               'label',
