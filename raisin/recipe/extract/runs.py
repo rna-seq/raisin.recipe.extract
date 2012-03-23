@@ -59,9 +59,6 @@ def main(buildout, buildout_directory, workspace, dumps_folder):
                 ]
     runs_file.write('\t'.join(headers))
     runs_file.write('\n')
-    """
-        {'species_id': '1', 'exp_description': 'None', 'mismatches': '2', 'Compartment': 'CELL', 'annotation_version': 'GENCODEV7', 'RNAType': 'LONGPOLYA', 'template_file': '/users/rg/dgonzalez/Projects/CLL/hg19/CLL_Gv7_CNAG_run76/src/pipeline/template3.0.txt', 'read_length': '76', 'genome_id': '1', 'partition': 'TUMOR', 'md5sum': '4e25d8a8c5f42385f88a9a421f6f43b7', 'expDate': 'None', 'paired': '\x01', 'Preprocessing': 'None', 'CellType': 'BLYMPHOCYTE', 'lab': 'CNAG', 'experiment_id': '001TR76', 'Bioreplicate': '1', 'genome_assembly': 'GRCh37(hg19)', 'project_id': 'Enc7CLL', 'annotation_id': '1'}
-    """
     commondbs = []
     profiles_file_name = os.path.join(workspace, 'profiles.csv')
     for profile in read_csv(profiles_file_name):
