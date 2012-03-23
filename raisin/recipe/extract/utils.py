@@ -49,13 +49,14 @@ def run_python(code, accession):
     return restricted_globals['result']
 
 
-def get_labeling(accession, labeling):
-
+def check_labeling(labeling):
     for key in ['pair_id', 'mate_id', 'label']:
         # No buildout variable substitution allowed to keep it simple
         if '${' in  labeling.get('key', ''):
             raise AttributeError
 
+
+def check_accession(accession):
     # The accession values should be given on one line when they don't
     # concern files
     for key in ["species",
@@ -75,9 +76,13 @@ def get_labeling(accession, labeling):
                 "type"
                ]:
         if '\n' in accession.get(key, ''):
-            print accession
-            print key, accession.get(key)
-            raise AttributeError
+            message = "One line for attribute %s (%s)" % (key, accession)
+            raise AttributeError(message)
+
+
+def get_labeling(accession, labeling):
+    check_accession(accession)
+    check_labeling(labeling)
 
     update = {}
     number_of_reads = len(accession['file_location'].split('\n'))
