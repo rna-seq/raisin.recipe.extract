@@ -59,6 +59,6 @@ class Recipe(object):
         if not os.path.exists(dumps_folder):
             raise AttributeError("dumps_folder not found: %s" % dumps_folder)
         runs.main(self.buildout, buildout_directory, workspace, dumps_folder)
-        
+
     def update(self):
         return self.install()
