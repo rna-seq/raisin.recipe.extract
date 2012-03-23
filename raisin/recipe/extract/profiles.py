@@ -31,11 +31,7 @@ def extract_profiles(parsed):
         yield profile
 
 
-def main(buildout, buildout_directory, workspace):
-    profile_files = []
-    for path in buildout['pipelines_configurations']['profiles'].split('\n'):
-        profile_files.append(os.path.join(buildout_directory, path))
-
+def main(profile_files, workspace):
     headers = ["project_id",
                "pipeline_id",
                "MAPPER",
