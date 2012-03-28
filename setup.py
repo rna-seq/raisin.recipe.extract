@@ -5,7 +5,7 @@ raisin.recipe.extract
 import os
 from setuptools import setup, find_packages
 
-version = '1.0'
+version = '1.1'
 
 long_description = ''
 entry_point = 'raisin.recipe.extract:Recipe'
