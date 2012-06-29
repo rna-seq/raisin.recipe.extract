@@ -45,7 +45,7 @@ setup(name='raisin.recipe.extract',
       namespace_packages=['raisin', 'raisin.recipe'],
       include_package_data=True,
       zip_safe=False,
-      test_suite='grape.recipe.extract.tests',
+      test_suite='raisin.recipe.extract.tests',
       install_requires=['setuptools',
                         'zc.buildout',
                         # -*- Extra requirements: -*-
