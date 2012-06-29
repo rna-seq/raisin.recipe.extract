@@ -117,9 +117,9 @@ class Recipe(object):
         genomes_file = self.get_genomes_file()
 
         accessions.main(workspace, accession_files)
-        annotations.main(workspace, annotations_file)
+        annotations.main(workspace, open(annotations_file, 'r'))
         files.main(workspace, accession_files)
-        genomes.main(workspace, genomes_file)
+        genomes.main(workspace, open(genomes_file, 'r'))
         profiles.main(workspace, profile_files)
         replicates.main(workspace, profile_files)
         runs.main(workspace, dumps_folder)

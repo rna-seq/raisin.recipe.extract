@@ -13,15 +13,14 @@ def main(workspace, genomes_file):
     template = '\t'.join(['%s'] * len(headers)) + '\n'
     output_file = open(os.path.join(workspace, "genomes.csv"), "w")
     output_file.write(template % headers)
-    input_file = open(genomes_file, 'r')
     parser = ConfigParser.RawConfigParser()
     parser.optionxform = lambda s: s
-    parser.readfp(input_file)
+    parser.readfp(genomes_file)
 
     for section in parser.sections():
         data = dict(parser.items(section))
         data.update(utils.file_info(data['file_location']))
         output_file.write(template % tuple([data[h] for h in headers]))
 
-    input_file.close()
+    genomes_file.close()
     output_file.close()
