@@ -15,6 +15,8 @@ def parse_profile_file(profile_file):
 def extract_profiles(parsed):
     pipelines = set([])
     for value in parsed.values():
+        # Recognize a pipeline run from the existence of a 'pipeline'
+        # or 'accession' attribute
         if 'pipeline' in value:
             pipelines.add(value['pipeline'])
         elif 'accession' in value:
@@ -54,8 +56,24 @@ def main(workspace, profile_files):
 
     for profile_file_name in profile_files:
         profile_file = open(profile_file_name, 'r')
+        
         parsed = parse_profile_file(profile_file)
-        for profile in extract_profiles(parsed):
+        profiles = [profile for profile in extract_profiles(parsed)]
+        if not profiles:
+            # No profiles have been found, so just use the minimal
+            # necessary information
+            profile = {'PROJECTID':'',
+                       'pipeline_id':'',
+                       'MAPPER':'',
+                       'MISMATCHES':'',
+                       'THREADS':'',
+                       'TEMPLATE':'',
+                       'COMMONDB':'',
+                       'ANNOTATION':'',
+                       'GENOMESEQ':''}
+            profile.update(parsed['pipeline'])
+            profiles = [profile]
+        for profile in profiles:
             output_file.write(template % (
                                   profile['PROJECTID'],
                                   profile['pipeline_id'],
