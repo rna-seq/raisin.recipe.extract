@@ -18,7 +18,7 @@ Barcelona.
 Important Note
 ==============
 
-The raisin.recipe.extract package is a a Buildout recipe used by Grape, and is not
+The raisin.recipe.extract package is a Buildout recipe used by Grape, and is not
 a standalone Python package. It is only going to be useful as installed by the 
 grape.buildout package.
 
