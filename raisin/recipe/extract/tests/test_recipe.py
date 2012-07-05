@@ -28,7 +28,7 @@ class RecipeTests(unittest.TestCase):
 
     def setUp(self):  # pylint: disable=C0103
         pass
-        
+
     def test_accessions(self):
         """
         Test the accessions main method
@@ -44,7 +44,7 @@ class RecipeTests(unittest.TestCase):
         workspace = SANDBOX
         annotations_file = StringIO.StringIO()
         self.failUnless(annotations.main(workspace, annotations_file) == None)
-        
+
     def test_files(self):
         """
         Test the files method

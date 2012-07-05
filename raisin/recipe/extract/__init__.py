@@ -40,11 +40,11 @@ class Recipe(object):
             pipelines_configurations
 
         section of the buildout.
-        
+
         Alternatively looks in the configured
-        
+
             profiles_folder
-    
+
         And takes all profile configurations from there.
         """
         result = []

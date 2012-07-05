@@ -8,9 +8,9 @@ from setuptools import setup, find_packages
 version = '1.1.1'
 
 long_description = """The raisin.recipe.extract package is a Buildout recipe used for
-creating the data warehouse of Raisin, the web application used for publishing the 
+creating the data warehouse of Raisin, the web application used for publishing the
 summary statistics of Grape, a pipeline used for processing and analyzing RNA-Seq data.
-In ETL terms, it extracts the data to be loaded and transformed into the data 
+In ETL terms, it extracts the data to be loaded and transformed into the data
 warehouse."""
 entry_point = 'raisin.recipe.extract:Recipe'
 entry_points = {"zc.buildout": [

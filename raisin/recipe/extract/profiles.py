@@ -56,7 +56,7 @@ def main(workspace, profile_files):
 
     for profile_file_name in profile_files:
         profile_file = open(profile_file_name, 'r')
-        
+
         parsed = parse_profile_file(profile_file)
         profiles = [profile for profile in extract_profiles(parsed)]
         if not profiles:
