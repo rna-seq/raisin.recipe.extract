@@ -4,7 +4,6 @@ Test for raisin.recipe.extract
 
 import os
 import unittest
-import shutil
 from pkg_resources import get_provider
 import StringIO
 
