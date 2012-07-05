@@ -62,15 +62,15 @@ def main(workspace, profile_files):
         if not profiles:
             # No profiles have been found, so just use the minimal
             # necessary information
-            profile = {'PROJECTID':'',
-                       'pipeline_id':'',
-                       'MAPPER':'',
-                       'MISMATCHES':'',
-                       'THREADS':'',
-                       'TEMPLATE':'',
-                       'COMMONDB':'',
-                       'ANNOTATION':'',
-                       'GENOMESEQ':''}
+            profile = {'PROJECTID': '',
+                       'pipeline_id': '',
+                       'MAPPER': '',
+                       'MISMATCHES': '',
+                       'THREADS': '',
+                       'TEMPLATE': '',
+                       'COMMONDB': '',
+                       'ANNOTATION': '',
+                       'GENOMESEQ': ''}
             profile.update(parsed['pipeline'])
             profiles = [profile]
         for profile in profiles:
