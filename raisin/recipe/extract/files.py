@@ -61,11 +61,6 @@ def main(workspace, accessions_files):
     for input_file in accessions_files:
         accession_file = open(input_file, 'r')
         accessions = parse_accession_file(accession_file)
-        if "labeling" in accessions:
-            labeling = accessions['labeling']
-            for accession_id, accession in accessions.items():
-                if not accession_id == 'labeling':
-                    accession.update(utils.get_labeling(accession, labeling))
 
         project_id = os.path.split(os.path.split(input_file)[0])[-1]
         files = extract_files(accessions)
