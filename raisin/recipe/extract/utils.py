@@ -1,7 +1,4 @@
 import os
-from RestrictedPython import compile_restricted
-from RestrictedPython.Guards import safe_builtins
-from RestrictedPython.PrintCollector import PrintCollector
 
 
 def file_info(file_location):
@@ -11,50 +8,6 @@ def file_info(file_location):
         info['file_not_found'] = 0
         info['file_size'] = os.path.getsize(file_location)
     return info
-
-
-def run_python(code, accession):
-    """
-    Run some restricted Python code for constructing the labels of accessions
-    """
-
-    if code.startswith("python:"):
-        # The python code should be stripped
-        raise AttributeError
-
-    # In order to get the result of the Python code out, we have to wrap it
-    # like this
-    code = 'print ' + code + ';result = printed'
-
-    # We compile the code in a restricted environment
-    compiled = compile_restricted(code, '<string>', 'exec')
-
-    # The getter is needed so that attributes from the accession can be used
-    # for the labels
-    def mygetitem(obj, attr):
-        return obj[attr]
-
-    # The following globals are usable from the restricted Python code
-    restricted_globals = dict(
-        __builtins__=safe_builtins,  # Use only some safe Python builtins
-        accession=accession,         # The accession is needed for the labels
-        _print_=PrintCollector,      # Pass this to get hold of the result
-        _getitem_=mygetitem,         # Needed for accessing the accession
-        _getattr_=getattr)           # Pass the standard getattr
-
-    # The code is now executed in the restricted environment
-    exec(compiled) in restricted_globals
-
-    # We collect the result variable from the restricted environment
-    return restricted_globals['result']
-
-
-def check_labeling(labeling):
-    for key in ['pair_id', 'mate_id', 'label']:
-        # No buildout variable substitution allowed to keep it simple
-        if '${' in labeling.get(key, ''):
-            print labeling
-            raise AttributeError
 
 
 def check_accession(accession):
@@ -79,30 +32,3 @@ def check_accession(accession):
         if '\n' in accession.get(key, ''):
             message = "One line for attribute %s (%s)" % (key, accession)
             raise AttributeError(message)
-
-
-def get_labeling(accession, labeling):
-    check_accession(accession)
-    check_labeling(labeling)
-
-    update = {}
-    number_of_reads = len(accession['file_location'].split('\n'))
-
-    for key in ['pair_id', 'label', 'mate_id']:
-        if key in labeling:
-            value = labeling[key].strip()
-            if value.startswith("python:"):
-                value = run_python(value[7:], accession).strip()
-            if key == 'mate_id' and number_of_reads > 1:
-                # The mate id gets a postfix of ".1" and ".2"
-                old_value = value
-                value = ""
-                for i in range(1, number_of_reads + 1):
-                    value += '%s%s\n' % (old_value, i)
-        if key == 'mate_id':
-            update[key] = value
-            update[key] = update[key].strip()
-        else:
-            update[key] = '%s\n' % value * number_of_reads
-            update[key] = update[key].strip()
-    return update
