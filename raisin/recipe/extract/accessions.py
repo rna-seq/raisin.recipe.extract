@@ -1,6 +1,6 @@
 import os
 import ConfigParser
-
+from grape.recipe.pipeline.prepare import check_read_labels
 
 def extract_accessions(accessions):
     for accession_id, accession in accessions.items():
@@ -51,6 +51,7 @@ def main(workspace, accession_files):
         accessions = extract_accessions(value)
 
         for accession_id, accession in accessions:
+            check_read_labels(accession, accession_id)
             for attribute in ['species',
                               'label',
                               'gender',

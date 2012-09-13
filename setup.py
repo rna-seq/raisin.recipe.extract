@@ -5,7 +5,7 @@ raisin.recipe.extract
 import os
 from setuptools import setup, find_packages
 
-version = '1.1.2'
+version = '1.1.3'
 
 long_description = """The raisin.recipe.extract package is a Buildout recipe used for
 creating the data warehouse of Raisin, the web application used for publishing the
@@ -49,6 +49,7 @@ setup(name='raisin.recipe.extract',
       install_requires=['setuptools',
                         'zc.buildout',
                         # -*- Extra requirements: -*-
+                        'grape.recipe.pipeline'
                         ],
       entry_points=entry_points,
       )
